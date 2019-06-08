@@ -13,7 +13,7 @@ metadata:
   selfLink: /apis/extensions/v1beta1/namespaces/lan/deployments/timemachine
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -39,7 +39,7 @@ spec:
         - name: tz
           value: "Europe/Berlin"
         - name: SET_PERMISSIONS
-          value: "true"
+          value: "false"
         - name: PASSWORD
           value: "JoooTimeMachine123"
         - name: SHARE_NAME
@@ -55,6 +55,10 @@ spec:
         image: marvinmarvin/docker-k8s-timemachine
         imagePullPolicy: Always
         name: timemachine
+        ports:
+        - containerPort: 548
+          name: timemachine
+          protocol: TCP
         volumeMounts:
         - mountPath: /var/netatalk
           name: k8s-cfg-timemachine
@@ -76,7 +80,7 @@ spec:
           path: /usr2
           type: Directory
       dnsPolicy: ClusterFirst
-      hostNetwork: true
+      hostNetwork: false
       nodeSelector:
         nodetype: nuc
       restartPolicy: Always
@@ -84,3 +88,26 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
 status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/address-pool: lan-loadbalancer
+    metallb.universe.tf/allow-shared-ip: lan-loadbalancer
+  labels:
+    k8s-app: timemachine
+  name: timemachine
+  namespace: lan
+spec:
+  externalTrafficPolicy: Cluster
+  loadBalancerIP: 192.168.1.100
+  ports:
+  - name: timemachine
+    port: 548
+    protocol: TCP
+    targetPort: timemachine
+  selector:
+    k8s-app: timemachine
+  sessionAffinity: None
+  type: LoadBalancer
