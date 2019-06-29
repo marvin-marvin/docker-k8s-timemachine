@@ -39,7 +39,7 @@ spec:
         - name: tz
           value: "Europe/Berlin"
         - name: SET_PERMISSIONS
-          value: "true"
+          value: "false"
         - name: PASSWORD
           value: "JoooTimeMachine123"
         - name: SHARE_NAME
@@ -63,7 +63,7 @@ spec:
         - mountPath: /var/netatalk
           name: k8s-cfg-timemachine
         - mountPath: /opt/timemachine
-          name: pvc-timemachine
+          name: k8s-cfg-timemachine-usr2
         resources: {}
         securityContext:
           privileged: false
@@ -71,17 +71,14 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       volumes:
-      - name: pvc-timemachine
-        persistentVolumeClaim:
-          claimName: timemachine
       - name: k8s-cfg-timemachine
         hostPath:
           path: /root/k8s-cfg/timemachine
           type: Directory
-#      - name: k8s-cfg-timemachine-usr2
-#        hostPath:
-#          path: /usr2
-#          type: Directory
+      - name: k8s-cfg-timemachine-usr2
+        hostPath:
+          path: /usr2
+          type: Directory
       dnsPolicy: ClusterFirst
       hostNetwork: false
       nodeSelector:
