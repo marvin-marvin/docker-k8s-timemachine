@@ -62,6 +62,7 @@ spec:
         volumeMounts:
         - mountPath: /var/netatalk
           name: k8s-cfg-timemachine
+          readOnly: true
         - mountPath: /opt/timemachine
           name: pvc-timemachine
         resources: {}
