@@ -39,7 +39,7 @@ spec:
         - name: tz
           value: "Europe/Berlin"
         - name: SET_PERMISSIONS
-          value: "true"
+          value: "false"
         - name: PASSWORD
           value: "JoooTimeMachine123"
         - name: SHARE_NAME
@@ -51,7 +51,7 @@ spec:
         - name: LOG_LEVEL
           value: "info"
         - name: CUSTOM_AFP_CONF
-          value: "false" 
+          value: "false"
         image: marvinmarvin/docker-k8s-timemachine
         imagePullPolicy: Always
         name: timemachine
@@ -62,23 +62,22 @@ spec:
         volumeMounts:
         - mountPath: /var/netatalk
           name: k8s-cfg-timemachine
-          readOnly: true
         - mountPath: /opt/timemachine
           name: pvc-timemachine
         resources: {}
         securityContext:
-          privileged: false
+          privileged: true
           procMount: Default
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       volumes:
-      - name: pvc-timemachine
-        persistentVolumeClaim:
-          claimName: timemachine
       - name: k8s-cfg-timemachine
         hostPath:
           path: /root/k8s-cfg/timemachine
           type: Directory
+      - name: pvc-timemachine
+        persistentVolumeClaim:
+          claimName: timemachine
 #      - name: k8s-cfg-timemachine-usr2
 #        hostPath:
 #          path: /usr2
