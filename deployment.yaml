@@ -114,26 +114,3 @@ spec:
     k8s-app: timemachine
   sessionAffinity: None
   type: LoadBalancer
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    metallb.universe.tf/address-pool: lan-loadbalancer
-    metallb.universe.tf/allow-shared-ip: lan-loadbalancer
-  labels:
-    k8s-app: timemachine
-  name: timemachine-250
-  namespace: lan
-spec:
-  externalTrafficPolicy: Cluster
-  loadBalancerIP: 192.168.1.250
-  ports:
-  - name: timemachine
-    port: 548
-    protocol: TCP
-    targetPort: timemachine
-  selector:
-    k8s-app: timemachine
-  sessionAffinity: None
-  type: LoadBalancer
