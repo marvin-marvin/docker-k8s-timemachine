@@ -1,4 +1,4 @@
-FROM amd64/debian:buster
+FROM amd64/debian:stretch
 ENV NETATALK_VERSION 3.1.12
 
 RUN apt-get update &&\
